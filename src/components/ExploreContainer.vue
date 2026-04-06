@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  name: String,
-});
+defineProps<{
+  name?: string;
+}>();
 </script>
 
 <style scoped>
