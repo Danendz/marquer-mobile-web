@@ -7,6 +7,11 @@ import type {
   User,
 } from '@/features/auth/types/auth.types';
 
+export const authKeys = {
+  all: ['auth'] as const,
+  me: () => [...authKeys.all, 'me'] as const,
+};
+
 export async function loginApi(payload: LoginPayload): Promise<ApiResponse<AuthResponse>> {
   const { data } = await authClient.post('/auth/login', payload);
   return data;

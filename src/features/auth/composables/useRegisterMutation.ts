@@ -1,15 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import { loginApi } from '@/features/auth/api/auth.api';
-import { authKeys } from '@/features/auth/api/auth.api';
+import { registerApi, fetchMeApi, authKeys } from '@/features/auth/api/auth.api';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { fetchMeApi } from '@/features/auth/api/auth.api';
 
-export function useLoginMutation() {
+export function useRegisterMutation() {
   const authStore = useAuthStore();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: loginApi,
+    mutationFn: registerApi,
     onSuccess: async (response) => {
       await authStore.setToken(response.data.token);
       const me = await fetchMeApi();

@@ -6,17 +6,34 @@ Calendar views (month/week), plan management with recurring tasks, and countdown
 ## Directory Structure
 ```
 calendar/
-  components/    # CalendarGrid, PlanCard, CountdownCard, WeekView
-  composables/   # useCalendarOverview, usePlansQuery, useCountdowns
+  components/    # CalendarGrid, PlanCard, CountdownCard, WeekView (TBD)
+  composables/   # 5 query + 7 mutation composables
   api/           # calendar.api.ts — raw axios calls + query keys
-  types/         # calendar.types.ts — Plan, PlanTask, Countdown, CalendarOverview
+  types/         # calendar.types.ts — Plan, PlanSchedule, Countdown, WeekData, etc.
   __tests__/     # Unit tests
 ```
+
+## Implemented Files
+- `types/calendar.types.ts` — Plan, PlanSchedule (discriminated union), PlanTask, Countdown, CalendarOverview, WeekData, WeekPlanTask, all payloads
+- `api/calendar.api.ts` — 12 API functions + `calendarKeys` query key factory
+- `composables/useCalendarOverviewQuery.ts` — overview with from/to (stale: SHORT)
+- `composables/useWeekDataQuery.ts` — week data with from/to (stale: SHORT)
+- `composables/useCountdownsQuery.ts` — countdowns list (stale: LONG)
+- `composables/usePlansQuery.ts` — plans list (stale: MEDIUM)
+- `composables/usePlansForDateQuery.ts` — plans for date (stale: SHORT)
+- `composables/useCreateCountdownMutation.ts`
+- `composables/useUpdateCountdownMutation.ts`
+- `composables/useDeleteCountdownMutation.ts`
+- `composables/useCreatePlanMutation.ts`
+- `composables/useUpdatePlanMutation.ts`
+- `composables/useDeletePlanMutation.ts`
+- `composables/useTogglePlanTaskMutation.ts`
 
 ## Conventions
 - **API file**: `calendar.api.ts` + `export const calendarKeys = { ... }`
 - **No Pinia store** — calendar view mode and selected date can use local composables with `ref()`
 - **Types**: `calendar.types.ts`
+- **PlanSchedule**: discriminated union with `type` field (daily, weekly, interval, monthly_dates, monthly_weekday)
 
 ## API Endpoints
 - `GET /calendar/overview` — month overview (query: from, to)

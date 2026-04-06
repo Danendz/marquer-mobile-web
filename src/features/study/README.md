@@ -6,13 +6,29 @@ Study session tracking with timer modes (count-up, count-down, pomodoro), subjec
 ## Directory Structure
 ```
 study/
-  components/    # Timer display, SubjectPicker, StatsChart
-  composables/   # useStudySessionsQuery, useStudyTimer, useStudySubjects
+  components/    # Timer display, SubjectPicker, StatsChart (TBD)
+  composables/   # 4 query + 8 mutation composables
   api/           # study.api.ts — raw axios calls + query keys
-  store/         # study.store.ts — Pinia store for active timer state (client-side)
-  types/         # study.types.ts — StudySession, StudySubject, StudyStats, TimerMode
+  store/         # study.store.ts — Pinia store for active timer state (TBD)
+  types/         # study.types.ts — StudySession, StudySubject, StudyStats, enums, payloads
   __tests__/     # Unit tests
 ```
+
+## Implemented Files
+- `types/study.types.ts` — StudySubject, StudySession, StudyStats, UserStudySettings, StudySessionStatus/TimerMode enums, all payloads
+- `api/study.api.ts` — 12 API functions + `studyKeys` query key factory
+- `composables/useStudySubjectsQuery.ts` — subjects list (stale: LONG)
+- `composables/useStudySessionsQuery.ts` — sessions with reactive params (stale: SHORT)
+- `composables/useStudyStatsQuery.ts` — stats (stale: SHORT)
+- `composables/useStudySettingsQuery.ts` — settings (stale: LONG)
+- `composables/useCreateStudySubjectMutation.ts`
+- `composables/useUpdateStudySubjectMutation.ts`
+- `composables/useDeleteStudySubjectMutation.ts`
+- `composables/useCreateStudySessionMutation.ts`
+- `composables/useUpdateStudySessionMutation.ts`
+- `composables/useCompleteStudySessionMutation.ts`
+- `composables/useCancelStudySessionMutation.ts`
+- `composables/useUpsertStudySettingsMutation.ts`
 
 ## Conventions
 - **API file**: `study.api.ts` + `export const studyKeys = { ... }`
@@ -20,7 +36,7 @@ study/
 - **Types**: `study.types.ts`
 
 ## API Endpoints
-- `GET /study/sessions` — list sessions (query: status, studySubjectId, dateFrom, dateTo)
+- `GET /study/sessions` — list sessions (query: status, study_subject_id, date_from, date_to)
 - `POST /study/sessions` — create session
 - `PUT /study/sessions/{id}` — update session
 - `POST /study/sessions/{id}/complete` — complete session
