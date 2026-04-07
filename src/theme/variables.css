@@ -1,2 +1,123 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+/**
+ * Ionic CSS Custom Properties
+ * Ported from Flutter theme: marquer-mobile/lib/config/theme.dart
+ * ---------------------------------------------------------------
+ */
+
+/* ── Light Mode (default) ───────────────────────────────────── */
+
+:root {
+  /* Primary */
+  --ion-color-primary: #4a7ae8;
+  --ion-color-primary-rgb: 74, 122, 232;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #426bcc;
+  --ion-color-primary-tint: #5c88ea;
+
+  /* Secondary */
+  --ion-color-secondary: #5e6a78;
+  --ion-color-secondary-rgb: 94, 106, 120;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #535d6a;
+  --ion-color-secondary-tint: #6e7986;
+
+  /* Tertiary (secondary container from Flutter) */
+  --ion-color-tertiary: #dee4ee;
+  --ion-color-tertiary-rgb: 222, 228, 238;
+  --ion-color-tertiary-contrast: #1a2029;
+  --ion-color-tertiary-contrast-rgb: 26, 32, 41;
+  --ion-color-tertiary-shade: #c3c9d2;
+  --ion-color-tertiary-tint: #e1e7f0;
+
+  /* Success */
+  --ion-color-success: #16a34a;
+  --ion-color-success-rgb: 22, 163, 74;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #138f41;
+  --ion-color-success-tint: #2dac5c;
+
+  /* Warning */
+  --ion-color-warning: #f59e0b;
+  --ion-color-warning-rgb: 245, 158, 11;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #d88b0a;
+  --ion-color-warning-tint: #f6a823;
+
+  /* Danger */
+  --ion-color-danger: #dc2626;
+  --ion-color-danger-rgb: 220, 38, 38;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #c22121;
+  --ion-color-danger-tint: #e03c3c;
+
+  /* Medium */
+  --ion-color-medium: #6b7280;
+  --ion-color-medium-rgb: 107, 114, 128;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #5e6471;
+  --ion-color-medium-tint: #7a808d;
+
+  /* Light */
+  --ion-color-light: #f2f4f7;
+  --ion-color-light-rgb: 242, 244, 247;
+  --ion-color-light-contrast: #1a1c1e;
+  --ion-color-light-contrast-rgb: 26, 28, 30;
+  --ion-color-light-shade: #d5d7d9;
+  --ion-color-light-tint: #f3f5f8;
+
+  /* Ionic globals — light */
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: #1a1c1e;
+  --ion-text-color-rgb: 26, 28, 30;
+  --ion-item-background: #ffffff;
+  --ion-card-background: #f2f4f7;
+  --ion-toolbar-background: #ffffff;
+  --ion-tab-bar-background: #ffffff;
+  --ion-tab-bar-border-color: #d1d5db;
+
+  /* Step colors for layered surfaces */
+  --ion-color-step-50: #f2f2f3;
+  --ion-color-step-100: #e6e6e8;
+  --ion-color-step-150: #d9d9dc;
+  --ion-color-step-200: #ccced1;
+  --ion-color-step-250: #c0c1c5;
+  --ion-color-step-300: #b3b5ba;
+  --ion-color-step-350: #a7a8ae;
+  --ion-color-step-400: #9a9ca3;
+  --ion-color-step-450: #8d8f97;
+  --ion-color-step-500: #81838c;
+  --ion-color-step-550: #747680;
+  --ion-color-step-600: #686a75;
+  --ion-color-step-650: #5b5d69;
+  --ion-color-step-700: #4e515e;
+  --ion-color-step-750: #424452;
+  --ion-color-step-800: #353847;
+  --ion-color-step-850: #292b3b;
+  --ion-color-step-900: #1c1f30;
+  --ion-color-step-950: #101224;
+
+  /* Custom design tokens (non-Ionic, for Tailwind / component use) */
+  --color-surface: #ffffff;
+  --color-surface-container: #f2f4f7;
+  --color-surface-container-highest: #e4e7ec;
+  --color-on-surface: #1a1c1e;
+  --color-on-surface-variant: #6b7280;
+  --color-secondary: #5e6a78;
+  --color-secondary-container: #dee4ee;
+  --color-on-secondary-container: #1a2029;
+  --color-outline: #d1d5db;
+  --color-outline-variant: #e5e7eb;
+  --color-primary-container: #d6e3ff;
+  --color-on-primary-container: #1b3a6b;
+}
+
+/* Dark mode is disabled — light only, matching Flutter ThemeMode.light.
+   To re-enable: add dark.system.css import in main.ts and add a
+   @media (prefers-color-scheme: dark) block here with dark color overrides. */

@@ -1,15 +1,16 @@
 import axios from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { toastController } from '@ionic/vue';
+import { refreshTokenApi } from '@/features/auth/api/auth.api';
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_MARQUER_API_URL,
   timeout: 10_000,
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 });
 
 const authClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_AUTH_URL,
+  baseURL: import.meta.env.VITE_AUTH_API_URL,
   timeout: 10_000,
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 });
@@ -76,8 +77,8 @@ function setupInterceptors({ getToken, setToken, logout }: InterceptorCallbacks)
         isRefreshing = true;
 
         try {
-          const { data } = await authClient.post('/auth/refresh');
-          const newToken = data.data.token;
+          const response = await refreshTokenApi();
+          const newToken = response.data.token;
           await setToken(newToken);
           processQueue(null, newToken);
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -97,21 +98,29 @@ function setupInterceptors({ getToken, setToken, logout }: InterceptorCallbacks)
 
   // Default error toast for both clients
   const showErrorToast = async (error: unknown) => {
-    if (axios.isAxiosError(error) && error.response) {
-      const status = error.response.status;
-      // Don't toast on 401 (handled by refresh) or 422 (handled by forms)
-      if (status === 401 || status === 422) {
-        return Promise.reject(error);
-      }
-      const message = error.response.data?.message || 'Something went wrong';
-      const toast = await toastController.create({
-        message,
-        color: 'danger',
-        duration: 3000,
-        position: 'bottom',
-      });
-      await toast.present();
+    if (!axios.isAxiosError(error)) return Promise.reject(error);
+
+    // Don't toast on 401 (handled by refresh)
+    if (error.response?.status === 401) {
+      return Promise.reject(error);
     }
+
+    let message: string;
+    if (error.code === 'ECONNABORTED') {
+      message = 'Timeout. Try again.';
+    } else if (error.code === 'ERR_NETWORK' || !error.response) {
+      message = 'No internet connection.';
+    } else {
+      message = error.response.data?.message || 'Something went wrong';
+    }
+
+    const toast = await toastController.create({
+      message,
+      color: 'danger',
+      duration: 3000,
+      position: 'bottom',
+    });
+    await toast.present();
     return Promise.reject(error);
   };
 

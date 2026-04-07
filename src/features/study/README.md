@@ -53,3 +53,62 @@ study/
 - `src/pages/study/ActiveSessionPage.vue`
 - `src/pages/study/StatsPage.vue`
 - `src/pages/study/SubjectsPage.vue`
+
+## Client Logic to Implement
+
+### Timer State Machine (P0 — most complex client logic)
+Port directly from Flutter: `lib/providers/study/timer_state_machine.dart` (197 lines)
+Lives in: `src/features/study/store/study.store.ts` (Pinia store)
+
+**Three modes:**
+- **Count-Up**: Simple increment each tick, runs until manually stopped
+- **Count-Down**: Increments `elapsedSeconds` until `targetSeconds`, auto-completes
+- **Pomodoro**: Multi-phase FSM
+  - Phases: `work → shortBreak → work → ... → work → longBreak → done`
+  - `elapsedSeconds` only counts during work phases (breaks excluded)
+  - `phaseElapsedSeconds` tracks current phase progress
+  - `completedCycles` increments after each work phase
+  - Auto-transitions when `phaseElapsedSeconds >= currentPhaseTotalSeconds`
+
+**Tick returns**: `{ newState, phaseCompleted, timerCompleted }` — UI reacts to flags for sound/vibration
+
+### Background Timer Recovery
+Flutter ref: `timer_state_machine.dart` → `recoverMissedTime(state, missedSeconds)`
+
+Use **Page Visibility API**: save timestamp on `visibilitychange` hidden, compute delta on visible, feed through state machine. For pomodoro, recovery can cross multiple phase boundaries.
+
+**Virtual start time**: `virtualStartMs = now - elapsed * 1000`. On resume: `elapsed = (now - virtualStartMs) / 1000`. No background ticking needed.
+
+### Timer Persistence (Capacitor Preferences)
+Keys to persist: `timer_session_id`, `timer_elapsed_seconds`, `timer_completed_cycles`, `timer_virtual_start_ms`, `timer_phase`, `timer_phase_virtual_start_ms`, `timer_mode`, `timer_paused`
+
+### Session Completion Rules
+- Session < 60 seconds → cancel (doesn't count as study time)
+- Session >= 60 seconds → complete with `actual_duration_seconds` + `pomodoro_completed_cycles`
+- Periodic sync to server every 60 seconds (prevents data loss on crash)
+
+### Session Form Validation
+Flutter ref: `lib/providers/study/session_form_notifier.dart`
+- Name must not be empty
+- Count-Down: min 1 minute, max 600 minutes (10 hours)
+- Pomodoro: work >= 1min, short break >= 1min, long break >= 1min, cycles >= 1
+
+### Sound & Vibration Feedback
+Flutter ref: `lib/services/timer_feedback_service.dart`
+- **Timer complete**: Play `timer_complete.mp3` + vibration pattern `[0, 500, 200, 500, 200, 500]`
+- **Phase complete** (pomodoro only): Vibration only (same pattern)
+- Web: Web Audio API + `navigator.vibrate()`
+- Native: `@capacitor/haptics` for vibration
+
+### Capacitor Plugins Needed
+- `@capacitor-community/keep-awake` — WakeLock during active timer
+- `@capacitor/haptics` — vibration feedback on timer/phase completion
+- `@capacitor/local-notifications` — timer reminders (no true foreground service in Capacitor)
+
+### Key Flutter Reference Files
+| File | Lines | What |
+|------|-------|------|
+| `lib/providers/study/timer_state_machine.dart` | 197 | Pure timer FSM — **port directly** |
+| `lib/providers/study/timer_provider.dart` | 467 | Timer orchestration + persistence |
+| `lib/providers/study/session_form_notifier.dart` | 129 | Session form validation |
+| `lib/services/timer_feedback_service.dart` | 38 | Sound + vibration |

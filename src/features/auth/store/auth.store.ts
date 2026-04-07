@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { AuthStatus } from '@/features/auth/types/auth.types';
 import type { User } from '@/features/auth/types/auth.types';
 import { storage } from '@/shared/utils/storage';
-import { fetchMeApi } from '@/features/auth/api/auth.api';
+import { fetchMeApi, logoutApi } from '@/features/auth/api/auth.api';
 
 const TOKEN_KEY = 'access_token';
 
@@ -54,6 +54,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout(): Promise<void> {
+    // Invalidate server token (fire-and-forget — clear local state regardless)
+    if (token.value) {
+      logoutApi().catch(() => {});
+    }
     token.value = null;
     user.value = null;
     await storage.remove(TOKEN_KEY);

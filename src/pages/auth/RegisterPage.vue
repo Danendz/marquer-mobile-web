@@ -1,16 +1,124 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Register</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <AppHeader title="Create Account" />
     <ion-content class="ion-padding">
-      <p>Register placeholder</p>
+      <div class="auth-container">
+        <form @submit.prevent="handleRegister">
+          <ion-list>
+            <ion-item>
+              <ion-input
+                v-model="form.name"
+                label="Name"
+                label-placement="floating"
+                type="text"
+                autocomplete="name"
+              />
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                v-model="form.email"
+                label="Email"
+                label-placement="floating"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+              />
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                v-model="form.password"
+                label="Password"
+                label-placement="floating"
+                type="password"
+                autocomplete="new-password"
+              />
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                v-model="form.password_confirmation"
+                label="Confirm Password"
+                label-placement="floating"
+                type="password"
+                autocomplete="new-password"
+              />
+            </ion-item>
+          </ion-list>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top"
+            :disabled="registerMutation.isPending.value"
+          >
+            <ion-spinner v-if="registerMutation.isPending.value" name="crescent" />
+            <span v-else>Create Account</span>
+          </ion-button>
+        </form>
+
+        <p class="auth-link">
+          Already have an account?
+          <router-link :to="ROUTE_PATHS.LOGIN">Sign In</router-link>
+        </p>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import {
+  IonPage,
+  IonContent,
+  IonList,
+  IonItem,
+  IonInput,
+  IonButton,
+  IonSpinner,
+} from '@ionic/vue';
+import AppHeader from '@/shared/components/AppHeader.vue';
+import { useRegisterMutation } from '@/features/auth/composables/useRegisterMutation';
+import { ROUTE_NAMES, ROUTE_PATHS } from '@/shared/constants/routes';
+
+const router = useRouter();
+const registerMutation = useRegisterMutation();
+
+const form = reactive({
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+});
+
+function handleRegister() {
+  registerMutation.mutate(form, {
+    onSuccess: () => {
+      router.replace({ name: ROUTE_NAMES.HOME });
+    },
+  });
+}
 </script>
+
+<style scoped>
+.auth-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}
+
+.auth-link a {
+  color: var(--ion-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+</style>

@@ -43,11 +43,6 @@ const routes: Array<RouteRecordRaw> = [
         name: ROUTE_NAMES.CALENDAR,
         component: () => import('@/pages/calendar/CalendarPage.vue'),
       },
-      {
-        path: 'me',
-        name: ROUTE_NAMES.ME,
-        component: () => import('@/pages/me/MePage.vue'),
-      },
     ],
   },
 
@@ -86,21 +81,6 @@ const routes: Array<RouteRecordRaw> = [
     path: ROUTE_PATHS.COUNTDOWN_DETAIL,
     name: ROUTE_NAMES.COUNTDOWN_DETAIL,
     component: () => import('@/pages/calendar/CountdownDetailPage.vue'),
-  },
-  {
-    path: ROUTE_PATHS.EDIT_PROFILE,
-    name: ROUTE_NAMES.EDIT_PROFILE,
-    component: () => import('@/pages/profile/EditProfilePage.vue'),
-  },
-  {
-    path: ROUTE_PATHS.SETTINGS,
-    name: ROUTE_NAMES.SETTINGS,
-    component: () => import('@/pages/settings/SettingsPage.vue'),
-  },
-  {
-    path: ROUTE_PATHS.FRIENDS,
-    name: ROUTE_NAMES.FRIENDS,
-    component: () => import('@/pages/friends/FriendsPage.vue'),
   },
 ];
 

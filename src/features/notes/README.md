@@ -37,3 +37,20 @@ notes/
 ## Related Pages
 - `src/pages/notes/NotesPage.vue`
 - `src/pages/notes/NoteEditorPage.vue`
+
+## Client Logic to Implement
+
+### Rich Text Editor
+Flutter ref: `lib/components/note_editor/note_editor.dart`
+
+Content stored as **Quill Delta JSON** in the database. Library choice TBD — options:
+- `quill` — direct Delta JSON compatibility, no migration needed
+- `tiptap` — better Vue integration, but different format (would need converter or migration)
+
+**Serialization:**
+- Save: `JSON.stringify(editor.getContents())`
+- Load: `editor.setContents(JSON.parse(content))`
+
+### Editor Toolbar
+- **Top bar**: Clear formatting, Undo, Redo, Save button (with loading spinner)
+- **Bottom bar** (horizontally scrollable): Checklist, Ordered list, Bullet list, Underline, Bold, Italic, Align (left, center, right)

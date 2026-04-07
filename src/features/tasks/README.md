@@ -50,3 +50,48 @@ tasks/
 ## Related Pages
 - `src/pages/tasks/TasksPage.vue`
 - `src/pages/tasks/ManageFoldersPage.vue`
+
+## Client Logic to Implement
+
+### Task Status Transitions
+- `toggleTaskStatus()`: `draft` ↔ `done` (ignores `progress`)
+- `deleteTask()`: sets status to `cancelled` (soft delete)
+- `restoreTask()`: `cancelled` → `draft`
+- `permanentlyDelete()`: actual API DELETE call
+
+**UI filtering logic:**
+- Active tasks: `status !== 'done' && status !== 'cancelled'`
+- Completed section: `status === 'done'` (collapsible, hidden when empty)
+- Deleted view: `status === 'cancelled'`
+
+### Task Time Auto-Adjustment
+Flutter ref: `lib/components/shared/task_edit_sheet.dart`
+- Setting start time auto-sets end time to `start + 60 min` (if no end time yet)
+- End time clamped to max `23:59`
+- End time validation: must be > start time (reject otherwise)
+- End time picker only enabled if start time is set
+
+### Inline Task Creation (Optimistic)
+- Create with negative ID (`-Date.now()`) before API response
+- Focus blur on input triggers trim + save
+- `suppressStopOnFocusLoss` flag prevents premature saves during rapid entry
+- On API success: replace optimistic task with server response
+
+### Category Dual-Keying (Unsaved Entities)
+Flutter ref: `lib/providers/tasks/task_folders_provider.dart`
+
+New unsaved categories get `tempUUID` (client-generated). All state lookups use:
+```
+isNew ? category.tempUUID === id : category.id === id
+```
+On save → API response replaces temp category with real one. Prevents adding if one is already being created.
+
+### Filter Smart Ordering
+When a category filter is active, its parent folder moves to top of the filter dropdown list and auto-expands.
+
+### Key Flutter Reference Files
+| File | Lines | What |
+|------|-------|------|
+| `lib/providers/tasks/task_folders_provider.dart` | ~250 | Folder/category state with dual-keying |
+| `lib/components/shared/task_edit_sheet.dart` | ~200 | Task edit form with time validation |
+| `lib/providers/tasks/tasks_provider.dart` | ~200 | Task CRUD with optimistic updates |

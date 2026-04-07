@@ -5,7 +5,7 @@ import { notesKeys, getNoteApi } from '@/features/notes/api/notes.api';
 import type { ID } from '@/shared/types/common';
 import { STALE_TIME } from '@/shared/constants/query';
 
-export function useNoteQuery(id: MaybeRefOrGetter<ID>) {
+export function useNoteQuery(id: MaybeRefOrGetter<ID>, enabled?: MaybeRefOrGetter<boolean>) {
   return useQuery({
     queryKey: notesKeys.detail(toValue(id)),
     queryFn: async () => {
@@ -13,5 +13,6 @@ export function useNoteQuery(id: MaybeRefOrGetter<ID>) {
       return response.data;
     },
     staleTime: STALE_TIME.MEDIUM,
+    enabled: enabled !== undefined ? toValue(enabled) : true,
   });
 }

@@ -127,8 +127,8 @@ features/{name}/
 - Use `router.push()` or `<router-link>` for navigation
 - Use `useIonRouter()` for Ionic-specific navigation with transitions
 - Tab-based navigation uses `<ion-tabs>` with `<ion-router-outlet>`
-- 4 tabs: Home (`/`), Notes (`/notes`), Calendar (`/calendar`), Me (`/me`)
-- Full-screen routes (no tabs): `/tasks`, `/study/*`, `/calendar/plan/*`, `/me/*` sub-pages
+- 3 tabs: Home (`/`), Notes (`/notes`), Calendar (`/calendar`)
+- Full-screen routes (no tabs): `/tasks`, `/study/*`, `/calendar/plan/*`, `/calendar/countdown/*`
 
 ### Data Fetching (Composable-First Pattern)
 - **API files** (`features/*/api/*.api.ts`): raw axios calls only, export named functions
